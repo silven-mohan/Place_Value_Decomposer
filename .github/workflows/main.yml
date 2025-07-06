@@ -1,0 +1,58 @@
+
+name: C Build and Run
+
+on:
+  push:
+    paths:
+      - '**/*.c'
+      - '**/*.yml'
+    branches:
+      - main
+    tags-ignore:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install GCC
+        run: sudo apt-get install -y build-essential
+
+      # Compile the code
+
+      - name: Compile the Code
+        run: gcc PlaceValue.c -o PV
+
+      # Run the code
+
+      - name: Run the code
+        run: |
+          echo -e "Test Run Result:\n" > Test-Run-Result/Result.txt
+          echo "9959675505" | ./PV >> Test-Run-Result/Result.txt
+
+      # Push Result to Repo
+
+      - name: Upload Place Value Decomposer Test Run Results to Repo
+        uses: actions/upload-artifact@v4
+        with:
+          name: Push Place Value Decomposer Test-Run-Result
+          path: Test-Run-Result/Result.txt
+      - name: Push Result.txt to Repo
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+          git add Test-Run-Result/Result.txt
+          git commit -m "Update Place Value Decomposer output [skip ci]" || echo "No changes to commit"
+          git push
