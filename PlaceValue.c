@@ -6,9 +6,9 @@
 
 int main()
 {
-	int num, i, len=0, digit, temp;
+	long long int num, i, len=0, digit, temp;
 	printf("Enter any number:");
-	scanf("%d", &num);
+	scanf("%lld", &num);
 	temp=num;
 	while(temp!=0)
 	{
@@ -18,8 +18,8 @@ int main()
 	temp=num;
 	for(i=1;i<=len;i++)
 	{
-		digit=temp/((int)pow(10, len-i));
-		printf("%d", digit*((int)pow(10, len-i)));
+		digit=temp/((long long int)pow(10, len-i));
+		printf("%lld", digit*((long int)pow(10, len-i)));
 		temp=temp%((int)pow(10, len-i));
 		if(i!=(len))
 			printf(" + ");
