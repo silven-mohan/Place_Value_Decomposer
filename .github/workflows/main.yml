@@ -30,7 +30,7 @@ jobs:
       # Compile the code
 
       - name: Compile the Code
-        run: gcc PlaceValue.c -o PV
+        run: gcc PlaceValue.c -o PV - lm
 
       # Run the code
 
